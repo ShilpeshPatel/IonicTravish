@@ -8,39 +8,37 @@ matrix:
       osx_image: xcode10.2
       language: node_js
       node_js: 7
-      env: BUILD_TYPE=ios NPM=6.9.0 NODE=10.16.0 CORDOVA=9.0.0 IONIC=4.12.0 FULL_BUILD=1 IONIC_NATIVE=4.7.0 PRELOAD_PLUGINS=1
+      env: BUILD_TYPE=ios NPM=6.9.0 NODE=10.16.0 CORDOVA=9.0.0 IONIC=4.12.0 FULL_BUILD=1 IONIC_NATIVE=4.7.1 PRELOAD_PLUGINS=1
     - os: linux
       language: android
       node_js: 7
-      env: BUILD_TYPE=android NPM=6.9.0 NODE=10.16.0 CORDOVA=9.0.0 IONIC=4.12.0 FULL_BUILD=1 IONIC_NATIVE=4.7.0 PRELOAD_PLUGINS=1
+      env: BUILD_TYPE=android NPM=6.9.0 NODE=10.16.0 CORDOVA=9.0.0 IONIC=4.12.0 FULL_BUILD=1 IONIC_NATIVE=4.7.1 PRELOAD_PLUGINS=1
       android:
         components:
           - tools
           - platform-tools
           - build-tools-28.0.3
           - android-28
+before_cache:
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -f  $HOME/.gradle/caches/transforms-1/transforms-1.lock
+- rm -rf $HOME/.gradle/caches/3.5/fileHashes/
+- rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
+  - $HOME/Library/Caches/Yarn/v1/
+  - $HOME/.cache/yarn/v1/
 
-before_install:
-- printenv
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    brew update > /dev/null;
-    brew upgrade;
-    brew install jq;
-    gem install --no-document cocoapods:1.5.3;
-    pod repo update;
-    fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-    uname -a;
-    nvm --version;
-    nvm install $NODE;
-    nvm alias default 9;
-    nvm list;
-    export PATH=/usr/lib/ccache:$PATH;
-    which g++;
-    fi
 install:
   - npm i -g npm@$NPM cordova@$CORDOVA ionic@$IONIC
-  
+before_install:
+- export LANG=en_US.UTF-8
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; brew install yarn ios-sim
+  jq ios-deploy cocoapods ; rvm use system ; pod setup ; fi
+- nvm install $NODE
+- yarn global add ionic cordova
 before_script:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./travis/addkeys.sh ; fi
 script:
