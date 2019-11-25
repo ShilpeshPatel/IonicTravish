@@ -5,10 +5,10 @@ branches:
 matrix:
   include:
   - os: osx
-      osx_image: xcode10.2
-      language: node_js
-      node_js: 7
-      env: BUILD_TYPE=ios NPM=5.6.0 NODE=9.6.1 CORDOVA=8.1.2 IONIC=3.20.0 FULL_BUILD=1 IONIC_NATIVE=4.7.0 PRELOAD_PLUGINS=1
+      osx_image:xcode10.2
+      language:node_js
+      node_js:7
+      env:BUILD_TYPE=ios NPM=5.6.0 NODE=9.6.1 CORDOVA=8.1.2 IONIC=3.20.0 FULL_BUILD=1 IONIC_NATIVE=4.7.0 PRELOAD_PLUGINS=1
   - os: linux
     sudo: false
     language: android
@@ -26,7 +26,7 @@ matrix:
       apt:
         sources:
         - sourceline: deb https://dl.yarnpkg.com/debian/ stable main
-          key_url: https://dl.yarnpkg.com/debian/pubkey.gpg
+          key_url:https://dl.yarnpkg.com/debian/pubkey.gpg
         packages:
         - oracle-java8-installer
         - oracle-java8-set-default
