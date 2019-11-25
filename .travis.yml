@@ -49,12 +49,9 @@ env:
   global:
   - JAVA_HOME=/usr/lib/jvm/java-8-oracle
 deploy:
-  provider: releases
-  github-token: aa6dac4a2930c04fab548dec03a52a5ee568d8d3
-  file_glob: true
-  file: output/*
+  provider: pages
   skip_cleanup: true
-  overwrite: true
+  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep_history: true
   on:
     branch: master
-  local_dir: www
