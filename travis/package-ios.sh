@@ -9,5 +9,5 @@ then
 fi
 
 mkdir -p output
-tar zcvf output/ionictravis-release-unsigned.app.tgz platforms/ios/build/emulator/IonicTravis.app
+tar zcvf output/ionictravis-release-unsigned.app.tgz platforms/ios/build/emulator/MyApp.app
 
