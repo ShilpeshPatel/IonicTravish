@@ -1,0 +1,57 @@
+branches:
+  only:
+  - master
+  - develop
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode10.2
+      language: node_js
+      node_js: 7
+      env: BUILD_TYPE=ios NPM=6.9.0 NODE=10.16.0 CORDOVA=9.0.0 IONIC=4.12.0 FULL_BUILD=1 IONIC_NATIVE=4.7.1 PRELOAD_PLUGINS=1
+    - os: linux
+      language: android
+      node_js: 7
+      env: BUILD_TYPE=android NPM=6.9.0 NODE=10.16.0 CORDOVA=9.0.0 IONIC=4.12.0 FULL_BUILD=1 IONIC_NATIVE=4.7.1 PRELOAD_PLUGINS=1
+      android:
+        components:
+          - tools
+          - platform-tools
+          - build-tools-28.0.3
+          - android-28
+before_cache:
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -f  $HOME/.gradle/caches/transforms-1/transforms-1.lock
+- rm -rf $HOME/.gradle/caches/3.5/fileHashes/
+- rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
+  - $HOME/Library/Caches/Yarn/v1/
+  - $HOME/.cache/yarn/v1/
+
+install:
+  - npm i -g npm@$NPM cordova@$CORDOVA ionic@$IONIC
+before_install:
+- export LANG=en_US.UTF-8
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; brew install yarn ios-sim
+  jq ios-deploy cocoapods ; rvm use system ; pod setup ; fi
+- nvm install $NODE
+- yarn global add ionic cordova
+before_script:
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./travis/addkeys.sh ; fi
+script:
+- yarn install
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./travis/build-ios.sh && ./travis/package-ios.sh ; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./travis/build-android.sh && ./travis/package-android.sh ; fi
+env:
+  global:
+  - JAVA_HOME=/usr/lib/jvm/java-8-oracle
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep_history: true
+  on:
+    branch: master
