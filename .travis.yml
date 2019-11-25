@@ -50,7 +50,7 @@ env:
   - JAVA_HOME=/usr/lib/jvm/java-8-oracle
 deploy:
   provider: releases
-  github-token: $GITHUB_TOKEN
+  github-token: aa6dac4a2930c04fab548dec03a52a5ee568d8d3
   file_glob: true
   file: output/*
   skip_cleanup: true
