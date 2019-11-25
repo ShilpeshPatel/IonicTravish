@@ -71,6 +71,6 @@ matrix:
       os: osx
       osx_image: xcode8.3
 script: 
-  - "yarn install"
+  - "npm install"
   - "if [[ \"$TRAVIS_OS_NAME\" == \"osx\" ]]; then ./travis/build-ios.sh && ./travis/package-ios.sh ; fi"
   - "if [[ \"$TRAVIS_OS_NAME\" == \"linux\" ]]; then ./travis/build-android.sh && ./travis/package-android.sh ; fi"
